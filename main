@@ -52,7 +52,7 @@ local Slider = Tab:CreateSlider({
 
 local Slider = Tab:CreateSlider({
    Name = "JUMPHEIGHT",
-   Range = {45, 10000000000000000},
+   Range = {45, 100000},
    Increment = 1,
    Suffix = "Height",
    CurrentValue = 45,
