@@ -63,7 +63,7 @@ local Slider = Tab:CreateSlider({
 })
 
 local Button = Tab:CreateButton({
-   Name = "Button Example",
+   Name = "freeze your character (reset to stop this)",
    Callback = function()
    -- Place this script inside a LocalScript under StarterPlayerScripts or StarterCharacterScripts
 
