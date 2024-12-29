@@ -52,10 +52,10 @@ local Slider = Tab:CreateSlider({
 
 local Slider = Tab:CreateSlider({
    Name = "JUMPHEIGHT",
-   Range = {45, 1000},
+   Range = {50, 1000},
    Increment = 1,
    Suffix = "Height",
-   CurrentValue = 45,
+   CurrentValue = 50,
    Flag = "Slider2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
    game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
