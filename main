@@ -36,7 +36,7 @@ local Window = Rayfield:CreateWindow({
 
 local Tab = Window:CreateTab("Player", 4483362458) -- Title, Image
 
-local Section = Tab:CreateSection("to change the walkspeed, drag the slider below!")
+local Section = Tab:CreateSection("to change the walkspeed and JumpHeight, drag the slider(s) below!")
 
 local Slider = Tab:CreateSlider({
    Name = "WALKSPEED",
