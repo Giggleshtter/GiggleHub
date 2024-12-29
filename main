@@ -63,42 +63,25 @@ local Slider = Tab:CreateSlider({
 })
 
 local Button = Tab:CreateButton({
-   Name = "press this and jump to freeze your character (reset to stop this)",
+   Name = "infinite jump",
    Callback = function()
-   -- Place this script inside a LocalScript under StarterPlayerScripts or StarterCharacterScripts
-
-local userInputService = game:GetService("UserInputService")
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-local jumpKey = Enum.KeyCode.Space -- Change this to any key you want to use
-
--- The jump cooldown is usually determined by humanoid's "JumpHeight" and "JumpPower"
--- We will disable the jump cooldown by constantly checking if the jump key is pressed
-local jumping = false
-
--- Function to handle jump logic
-local function onInputBegan(input)
-    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == jumpKey then
-        -- If the player presses the jump button, we make them jump
-        if not jumping then
-            humanoid:ChangeState(Enum.HumanoidStateType.Physics)
-            humanoid:Move(Vector3.new(0, humanoid.JumpHeight, 0)) -- Make the humanoid jump immediately
-            jumping = true
-        end
+   local Player = game:GetService'Players'.LocalPlayer;
+local UIS = game:GetService'UserInputService';
+ 
+_G.JumpHeight = 50;
+ 
+function Action(Object, Function) if Object ~= nil then Function(Object); end end
+ 
+UIS.InputBegan:connect(function(UserInput)
+    if UserInput.UserInputType == Enum.UserInputType.Keyboard and UserInput.KeyCode == Enum.KeyCode.Space then
+        Action(Player.Character.Humanoid, function(self)
+            if self:GetState() == Enum.HumanoidStateType.Jumping or self:GetState() == Enum.HumanoidStateType.Freefall then
+                Action(self.Parent.HumanoidRootPart, function(self)
+                    self.Velocity = Vector3.new(0, _G.JumpHeight, 0);
+                end)
+            end
+        end)
     end
-end
-
--- Function to handle jump stopping (when you land or change state)
-local function onStateChanged(_, newState)
-    if newState == Enum.HumanoidStateType.Seated or newState == Enum.HumanoidStateType.Physics then
-        jumping = false
-    end
-end
-
--- Connect functions
-userInputService.InputBegan:Connect(onInputBegan)
-humanoid.StateChanged:Connect(onStateChanged)
-
+end)
    end,
 })
