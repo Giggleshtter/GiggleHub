@@ -62,7 +62,7 @@ local Slider = Tab:CreateSlider({
    end,
 })
 
-local Button = Tab:CreateButton({
+local Button = Tab:CreateToggle({
    Name = "INFINITE JUMP (this uses 50 JumpPower)",
    Callback = function()
    local Player = game:GetService'Players'.LocalPlayer;
@@ -83,24 +83,5 @@ UIS.InputBegan:connect(function(UserInput)
         end)
     end
 end)
-   end,
-})
-
-local Toggle = Tab:CreateButton({
-   Name = "Noclip",
-   CurrentValue = false,
-   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Value)
-   local function applyNoClip(character)
-    if not character then return end
-    for _, part in pairs(character:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.CanCollide = not noClip
-        end
-    end
-    if character:FindFirstChild("HumanoidRootPart") then
-        character.HumanoidRootPart.CanCollide = not noClip
-    end
-end
    end,
 })
