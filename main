@@ -4,7 +4,7 @@ local Window = Rayfield:CreateWindow({
    Name = "Giggle Hub (free)",
    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
    LoadingTitle = "Successfully Loading Your Script",
-   LoadingSubtitle = "THIS IS MOBILE AND PC SUPPORTED",
+   LoadingSubtitle = "SUPPORTS MOBILE AND PC!!",
    Theme = "Ocean", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
    DisableRayfieldPrompts = false,
