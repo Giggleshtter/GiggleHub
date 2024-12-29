@@ -63,7 +63,7 @@ local Slider = Tab:CreateSlider({
 })
 
 local Button = Tab:CreateButton({
-   Name = "infinite jump",
+   Name = "INFINITE JUMP (this uses 50 JumpPower)",
    Callback = function()
    local Player = game:GetService'Players'.LocalPlayer;
 local UIS = game:GetService'UserInputService';
