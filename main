@@ -105,109 +105,82 @@ end)
 local Button = Tab:CreateButton({
    Name = "NOCLIP (Press N to toggle)",
    Callback = function()
-   local uis = game:GetService("UserInputService")
+local uis = game:GetService("UserInputService")
 local rs = game:GetService("RunService")
 local lp = game.Players.LocalPlayer
 local c = true
+local flying = false
+local bv, bg, hrp, con
 
-uis.InputBegan:Connect(function(i,g)
-	if g then return end
-	if i.KeyCode == Enum.KeyCode.N then
-		c = not c
-	end
-end)
-
-local function nc(chr)
-	rs.Stepped:Connect(function()
-		if c then
-			for _,v in pairs(chr:GetDescendants()) do
-				if v:IsA("BasePart") then
-					v.CanCollide = false
-				end
-			end
-		end
-	end)
-end
-
-if lp.Character then
-	nc(lp.Character)
-end
-
-lp.CharacterAdded:Connect(nc)
-
-   end,
-})
-
-local Button = Tab:CreateButton({
-   Name = "FLY (Press H to toggle)",
-   Callback = function()
-   local uis = game:GetService("UserInputService")
-local rs = game:GetService("RunService")
-local lp = game.Players.LocalPlayer
-local c = true
-local f, bv, bg
-
-local function setfly(char)
-	if f then f:Disconnect() end
-	local hrp = char:WaitForChild("HumanoidRootPart")
+local function fly()
+	if flying then return end
+	flying = true
+	hrp = lp.Character:WaitForChild("HumanoidRootPart")
 	bv = Instance.new("BodyVelocity")
 	bg = Instance.new("BodyGyro")
 	bv.Velocity = Vector3.zero
-	bv.MaxForce = Vector3.new(9e9,9e9,9e9)
-	bv.P = 9e4
+	bv.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+	bv.P = 1e4
 	bv.Parent = hrp
 	bg.CFrame = hrp.CFrame
-	bg.MaxTorque = Vector3.new(9e9,9e9,9e9)
-	bg.P = 9e4
+	bg.MaxTorque = Vector3.new(1e5, 1e5, 1e5)
+	bg.P = 1e4
 	bg.Parent = hrp
-
-	local d = {w = 0, a = 0, s = 0, d = 0}
-
-	uis.InputBegan:Connect(function(i,g)
-		if g then return end
-		if i.KeyCode == Enum.KeyCode.W then d.w = 1 end
-		if i.KeyCode == Enum.KeyCode.A then d.a = 1 end
-		if i.KeyCode == Enum.KeyCode.S then d.s = 1 end
-		if i.KeyCode == Enum.KeyCode.D then d.d = 1 end
-	end)
-
-	uis.InputEnded:Connect(function(i)
-		if i.KeyCode == Enum.KeyCode.W then d.w = 0 end
-		if i.KeyCode == Enum.KeyCode.A then d.a = 0 end
-		if i.KeyCode == Enum.KeyCode.S then d.s = 0 end
-		if i.KeyCode == Enum.KeyCode.D then d.d = 0 end
-	end)
-
-	f = rs.RenderStepped:Connect(function()
+	local keys = {W=false, A=false, S=false, D=false}
+	
+	local function update()
 		if not c then
 			bv.Velocity = Vector3.zero
 			return
 		end
 		local cam = workspace.CurrentCamera
 		local dir = Vector3.zero
-		if d.w == 1 then dir += cam.CFrame.LookVector end
-		if d.s == 1 then dir -= cam.CFrame.LookVector end
-		if d.a == 1 then dir -= cam.CFrame.RightVector end
-		if d.d == 1 then dir += cam.CFrame.RightVector end
-		bv.Velocity = dir.Unit * 60
+		if keys.W then dir += cam.CFrame.LookVector end
+		if keys.S then dir -= cam.CFrame.LookVector end
+		if keys.A then dir -= cam.CFrame.RightVector end
+		if keys.D then dir += cam.CFrame.RightVector end
+		bv.Velocity = dir.Unit * 80
 		bg.CFrame = cam.CFrame
+	end
+
+	con = rs.RenderStepped:Connect(update)
+
+	uis.InputBegan:Connect(function(i,g)
+		if g then return end
+		if i.KeyCode == Enum.KeyCode.W then keys.W = true end
+		if i.KeyCode == Enum.KeyCode.A then keys.A = true end
+		if i.KeyCode == Enum.KeyCode.S then keys.S = true end
+		if i.KeyCode == Enum.KeyCode.D then keys.D = true end
 	end)
+
+	uis.InputEnded:Connect(function(i)
+		if i.KeyCode == Enum.KeyCode.W then keys.W = false end
+		if i.KeyCode == Enum.KeyCode.A then keys.A = false end
+		if i.KeyCode == Enum.KeyCode.S then keys.S = false end
+		if i.KeyCode == Enum.KeyCode.D then keys.D = false end
+	end)
+end
+
+local function stop()
+	flying = false
+	c = false
+	if bv then bv:Destroy() end
+	if bg then bg:Destroy() end
+	if con then con:Disconnect() end
 end
 
 uis.InputBegan:Connect(function(i,g)
 	if g then return end
 	if i.KeyCode == Enum.KeyCode.H then
 		c = not c
+		if c then fly() else stop() end
 	end
 end)
 
-if lp.Character then
-	setfly(lp.Character)
-end
-
-lp.CharacterAdded:Connect(function(char)
-	repeat wait() until char:FindFirstChild("HumanoidRootPart")
-	setfly(char)
+if lp.Character then fly() end
+lp.CharacterAdded:Connect(function()
+	repeat wait() until lp.Character:FindFirstChild("HumanoidRootPart")
+	if c then fly() end
 end)
 
    end,
