@@ -103,13 +103,9 @@ end)
 })
 
 local Button = Tab:CreateButton({
-   Name = "Noclip (Press N to toggle!!)",
+   Name = "Noclip (Press N to toggle)",
    Callback = function()
-   game.StarterGui:SetCore("SendNotification", {
-    Title = "GiggleHub Says;";
-    Text = "- Noclip executed! Press N to toggle!!";
-    Icon = "nil;",
-local uis = game:GetService("UserInputService")
+   local uis = game:GetService("UserInputService")
 local rs = game:GetService("RunService")
 local lp = game.Players.LocalPlayer
 local c = true
@@ -138,8 +134,6 @@ if lp.Character then
 end
 
 lp.CharacterAdded:Connect(nc)
-end
-end
-end)
+
    end,
 })
